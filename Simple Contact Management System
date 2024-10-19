@@ -1,0 +1,169 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Contact class
+class Contact {
+    private String name;
+    private String phoneNumber;
+    private String email;
+
+    // Constructor
+    public Contact(String name, String phoneNumber, String email) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // toString method for easy display
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Phone: " + phoneNumber + ", Email: " + email;
+    }
+}
+
+// ContactManager class
+public class ContactManager {
+    private static ArrayList<Contact> contacts = new ArrayList<>();
+    
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\n1. Add Contact");
+            System.out.println("2. View Contacts");
+            System.out.println("3. Edit Contact");
+            System.out.println("4. Delete Contact");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            int choice = input.nextInt();
+            input.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addContact(input);
+                    break;
+                case 2:
+                    viewContacts();
+                    break;
+                case 3:
+                    editContact(input);
+                    break;
+                case 4:
+                    deleteContact(input);
+                    break;
+                case 5:
+                    exit = true;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+        input.close();
+    }
+
+    // Add a new contact
+    private static void addContact(Scanner input) {
+        System.out.print("Enter Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter Phone Number: ");
+        String phoneNumber = input.nextLine();
+        System.out.print("Enter Email: ");
+        String email = input.nextLine();
+
+        contacts.add(new Contact(name, phoneNumber, email));
+        System.out.println("Contact added successfully!");
+    }
+
+    // View contacts
+    private static void viewContacts() {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            System.out.println("\nContact List:");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println((i + 1) + ". " + contacts.get(i).toString());
+            }
+        }
+    }
+
+    // Edit a contact
+    private static void editContact(Scanner input) {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts to edit.");
+            return;
+        }
+
+        viewContacts();
+        System.out.print("Enter the number of the contact to edit: ");
+        int index = input.nextInt() - 1;
+        input.nextLine(); // Consume newline
+
+        if (index >= 0 && index < contacts.size()) {
+            Contact contact = contacts.get(index);
+
+            System.out.println("Editing contact: " + contact.getName());
+            System.out.print("Enter new name (leave blank to keep current): ");
+            String newName = input.nextLine();
+            System.out.print("Enter new phone number (leave blank to keep current): ");
+            String newPhone = input.nextLine();
+            System.out.print("Enter new email (leave blank to keep current): ");
+            String newEmail = input.nextLine();
+
+            if (!newName.isEmpty()) contact.setName(newName);
+            if (!newPhone.isEmpty()) contact.setPhoneNumber(newPhone);
+            if (!newEmail.isEmpty()) contact.setEmail(newEmail);
+
+            System.out.println("Contact updated successfully!");
+        } else {
+            System.out.println("Invalid contact number.");
+        }
+    }
+
+    // Delete a contact
+    private static void deleteContact(Scanner input) {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts to delete.");
+            return;
+        }
+
+        viewContacts();
+        System.out.print("Enter the number of the contact to delete: ");
+        int index = input.nextInt() - 1;
+        input.nextLine(); // Consume newline
+
+        if (index >= 0 && index < contacts.size()) {
+            contacts.remove(index);
+            System.out.println("Contact deleted successfully.");
+        } else {
+            System.out.println("Invalid contact number.");
+        }
+    }
+}
